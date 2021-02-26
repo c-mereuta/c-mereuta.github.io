@@ -16,51 +16,72 @@
     <a class="navbar-brand" href="#">
         <img src="credit-suisse-white-black-bg.png" width="135" height="31" class="d-inline-block align-top" alt="CSlogo">
     </a>
+    <label class="form-label text-light">A123456</label>
 </nav>
 <div class="container px-lg-5">
     <div class="row mx-lg-n5">
         <div class="col py-3 px-lg-5 border bg-light">
             <div class="card">
                 <div class="card-header">
-                    Suggested Actions
+                    Smart Mail Assitant
                 </div>
                 <div class="card-body">
                     <form>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label class="form-label">Suggested Action</label>
+                                    <select class="form-select" aria-label="Default select example" disabled>
+                                        <option selected>Send Attachment to Elar</option>
+                                        <option value="1">Create Client Note</option>
+                                        <option value="2">Create Cowo</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm">
+                                    <label class="form-label">Detected CIF</label>
+                                    <input type="text" class="form-control" placeholder="1234-123123-0" aria-label="CIF">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            <label>Detected Form Number</label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>610203-2.20 Power Of Attorney</option>
+                                <option value="1">Create Client Note</option>
+                                <option value="2">Create Cowo</option>
+                            </select>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    I have checked signatories according to signatory list
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    I have updated/enter the PoA holder in KYC Front Net
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2">
+                                <label class="form-check-label" for="flexCheckChecked2">
+                                    I have performed a callback
+                                </label>
+                            </div>
                         </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Comments</span>
+                            <textarea class="form-control" aria-label="Comments"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail11" aria-describedby="emailHelp" placeholder="Enter email">
-                            <small id="emailHelp1" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <a href="img.PNG" ><button type="submit" class="btn btn-primary">Submit</button></a>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword11" placeholder="Password">
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck11">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
