@@ -34,10 +34,10 @@
             <div class="container pt-2 pb-2" id="documentUpload">
                 <h5>Upload a Document</h5>
                 <div class="row">
-                    <label class="col-sm-2 col-form-label" for="exampleFormControlFile1">Drag & drop
+                    <label class="col-sm-2 col-form-label" for="uploadInput">Drag & drop
                         or choose a file</label>
                     <div class="col-sm-6">
-                        <input class="form-control-file" id="exampleFormControlFile1"
+                        <input class="form-control-file" id="uploadInput"
                                type="file">
                     </div>
                     <div class="col-auto">
@@ -49,7 +49,7 @@
 
             <div class="container pt-2 pb-2" hidden id="documentPreview">
                 <h5>Preview Document</h5>
-                <iframe frameborder="no"
+                <iframe id="frame" frameborder="no"
                         src="https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fhomepages.inf.ed.ac.uk%2Fneilb%2FTestWordDoc.doc"
                         style="width:100%;height:500px"></iframe>
 
@@ -71,10 +71,10 @@
                             </div>
                         </div>
                         <div class="row" hidden id="formID">
-                            <label class="col-sm-2 col-form-label" for="formIDinput">Form</label>
+                            <label class="col-sm-2 col-form-label" for="formNumber">Form</label>
                             <div class="col-sm-6">
-                                <input class="form-control" id="formIDinput"
-                                       placeholder="610203-2.20 Power Of Attorney"
+                                <input class="form-control" id="formNumber"
+                                       placeholder=""
                                        type="text">
                             </div>
                             <div class="col-auto">
@@ -246,7 +246,7 @@
   }
 
   function createCowo() {
-    window.location.href = 'http://www.google.com';
+    window.location.href = 'https://iops.csintra.net';
   }
 
   function reload() {
@@ -256,12 +256,24 @@
 
 <script>
   function uploadDocument() {
+    filename = document.getElementById('uploadInput').value.replace('C:\\fakepath\\', '')
+    document.getElementById('documentPreview')
     document.getElementById('documentUpload').setAttribute('hidden', '');
+    document.getElementById('frame').setAttribute('src',filename)
     document.getElementById('documentPreview').removeAttribute('hidden');
     document.getElementById('processStart').textContent = 'Detected Information';
     document.getElementById('CIF').setAttribute('placeholder', '1234-123123-0');
+    if(filename.includes('Vollmacht')) {
+      document.getElementById('nextAction').setAttribute('placeholder', 'Forward to Client-ID');
+      document.getElementById('formNumber').setAttribute('placeholder', '610203-2.20 Power Of Attorney')
+    } else if (filename.includes('OnlineBanking')) {
+      document.getElementById('nextAction').setAttribute('placeholder', 'Forward to Cowo 1890');
+      document.getElementById('formNumber').setAttribute('placeholder', '614738-6.20 Application for a debit Mastercard')
+    } else if (filename.includes('DebitMasterCard')) {
+      document.getElementById('nextAction').setAttribute('placeholder', 'Forward to Cowo 1890');
+      document.getElementById('formNumber').setAttribute('placeholder', '614698-8.17 Online Banking')
+    }
     document.getElementById('formID').removeAttribute('hidden');
-    document.getElementById('nextAction').setAttribute('placeholder', 'Forward to CID');
   }
 </script>
 <!-- Optional JavaScript -->
