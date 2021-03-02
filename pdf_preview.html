@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pdf Preview</title>
+    <title>Smart Mail Assistant</title>
     <link crossorigin="anonymous"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           rel="stylesheet">
     <link crossorigin="anonymous" href="style.css" rel="stylesheet">
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <link href="/site.webmanifest" rel="manifest">
+    <meta content="#da532c" name="msapplication-TileColor">
+    <meta content="#ffffff" name="theme-color">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/542d07bff7.js"></script>
 </head>
 <body>
@@ -24,31 +30,50 @@
             <h4>Smart Mail Assistant</h4>
         </div>
         <div class="card-body">
-            <div class="container pt-2 pb-2">
-                <h5>Preview Document</h5>
-                <iframe frameborder="5" height="300px"
-                        src="example.pdf"
-                        width="100%">
-                </iframe>
+
+            <div class="container pt-2 pb-2" id="documentUpload">
+                <h5>Upload a Document</h5>
+                <div class="row">
+                    <label class="col-sm-2 col-form-label" for="exampleFormControlFile1">Drag & drop
+                        or choose a file</label>
+                    <div class="col-sm-6">
+                        <input class="form-control-file" id="exampleFormControlFile1"
+                               type="file">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-light" onclick="uploadDocument()" type="submit"><i
+                                class="fas fa-file-upload"></i></button>
+                    </div>
+                </div>
             </div>
+
+            <div class="container pt-2 pb-2" hidden id="documentPreview">
+                <h5>Preview Document</h5>
+                <iframe frameborder="no"
+                        src="https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fhomepages.inf.ed.ac.uk%2Fneilb%2FTestWordDoc.doc"
+                        style="width:100%;height:500px"></iframe>
+
+            </div>
+            <hr>
             <div class="container">
                 <form>
                     <div class="pt-2 pb-2">
-                        <h5>Detected information</h5>
+                        <h5 id="processStart"><b>OR Alternatively</b> start a new process (Please
+                            fill in the fields)</h5>
                         <div class="row">
                             <label class="col-sm-2 col-form-label" for="CIF">Client ID</label>
                             <div class="col-sm-6">
-                                <input class="form-control" id="CIF" placeholder="1234-123123-0"
+                                <input class="form-control" id="CIF"
                                        type="text">
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-search"></i>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-sm-2 col-form-label" for="formID">Form</label>
+                        <div class="row" hidden id="formID">
+                            <label class="col-sm-2 col-form-label" for="formIDinput">Form</label>
                             <div class="col-sm-6">
-                                <input class="form-control" id="formID"
+                                <input class="form-control" id="formIDinput"
                                        placeholder="610203-2.20 Power Of Attorney"
                                        type="text">
                             </div>
@@ -61,7 +86,6 @@
                                 Step</label>
                             <div class="col-sm-6">
                                 <input class="form-control" id="nextAction"
-                                       placeholder="Forward to CID"
                                        type="text">
                             </div>
                             <div class="col-auto">
@@ -72,43 +96,73 @@
                     <div class="pt-2 pb-2">
                         <h5>Checks</h5>
                         <div class="form-check">
-                            <input checked class="form-check-input" id="signatory" type="checkbox"
+                            <input checked class="form-check-input" id="signatory"
+                                   onclick="validation()" type="checkbox"
                                    value="">
                             <label class="form-check-label" for="signatory">
                                 I have checked signatories according to signatory list
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" id="kyc" type="checkbox" value="">
+                            <input class="form-check-input" id="kyc" onclick="validation()"
+                                   type="checkbox" value="">
                             <label class="form-check-label" for="kyc">
                                 I have entered/updated the PoA holder in KYC FrontNet
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" id="callbacks" type="checkbox" value="">
+                            <input class="form-check-input" id="callbacks" onclick="validation()"
+                                   type="checkbox" value="">
                             <label class="form-check-label" for="callbacks">
                                 I have performed a callback
                             </label>
+                            <div class="container">
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label" for="dateCallback">Date/Time</label>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" id="dateCallback"
+                                               type="datetime-local">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label" for="phoneNumber">Phone Number Used</label>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" id="phoneNumber"
+                                               type="tel">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label" for="contactedPerson">Contacted Person</label>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" id="contactedPerson"
+                                               type="text">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                        <div class="form-floating pt-2 pb-2">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="annotations" style="height: 100px"></textarea>
-                            <label for="annotations">Annotations (for processing units)</label>
-                        </div>
-                        <div class="form-floating pt-2 pb-2">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="comments" style="height: 100px"></textarea>
-                            <label for="comments">Comments</label>
-                        </div>
-                    <div class="pb-2 pt-2">
-                        <h5>Options</h5>
-                        <p>TBD</p>
-
+                    <div class="form-floating pt-2 pb-2">
+                        <textarea class="form-control" id="annotations"
+                                  placeholder="Leave a comment here"
+                                  style="height: 100px"></textarea>
+                        <label for="annotations">Annotations (for processing units)</label>
+                    </div>
+                    <div class="form-floating pt-2 pb-2">
+                        <textarea class="form-control" id="comments"
+                                  placeholder="Leave a comment here"
+                                  style="height: 100px"></textarea>
+                        <label for="comments">Comments</label>
                     </div>
                 </form>
                 <div class="modal-footer">
-                    <a href="index.html"><button type="button" class="btn btn-danger">Cancel</button></a>
+                    <a href="pdf_preview.html">
+                        <button class="btn btn-danger" type="button">Cancel</button>
+                    </a>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <button class="btn btn-secondary" data-bs-target="#validationCheck"
+                            data-bs-toggle="modal"
+                            id="submit"
+                            type="button">
                         Submit
                     </button>
                 </div>
@@ -120,30 +174,94 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title" id="staticBackdropLabel">Operation successful</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>File was forwarded to the processing unit</p>
                 <p>You can upload a new file or close this application</p>
             </div>
             <div class="modal-footer">
-                <a href="index.html"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Upload new file</button></a>
-                <a href="javascript:close_window();"><button type="button" class="btn btn-danger">Close Application</button></a>
+                <button class="btn btn-secondary" onclick="reload()" data-bs-dismiss="modal" type="button">Upload a new
+                    file
+                </button>
+                <button class="btn btn-danger" onclick="close_window()" type="button">Close Application</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Modal 2-->
+
+<div aria-hidden="true" aria-labelledby="validationCheckLabel" class="modal fade"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false" id="validationCheck" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="validationCheckLabel">Warning</h5>
+            </div>
+            <div class="modal-body">
+                <p>Please complete all the checks before submitting</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Understood
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
   function close_window() {
-    if (confirm("Close Window?")) {
-      close();
+      close()
+  }
+</script>
+
+<script>
+  function validation() {
+    nextAction = document.getElementById('nextAction').value;
+    checkbox1 = document.getElementById('signatory');
+    checkbox2 = document.getElementById('kyc');
+    checkbox3 = document.getElementById('callbacks');
+    submit = document.getElementById('submit');
+    if (checkbox1.checked && checkbox2.checked && checkbox3.checked) {
+      if (nextAction == 'Create Cowo') {
+        submit.removeAttribute('data-bs-target');
+        submit.removeAttribute('data-bs-toggle');
+        submit.setAttribute('onclick', 'createCowo()');
+      } else {
+        submit.setAttribute('data-bs-target', '#staticBackdrop');
+      }
+
+    } else {
+      submit.setAttribute('data-bs-target', '#validationCheck');
     }
+  }
+
+  function createCowo() {
+    window.location.href = 'http://www.google.com';
+  }
+
+  function reload() {
+    location.reload()
+  }
+</script>
+
+<script>
+  function uploadDocument() {
+    document.getElementById('documentUpload').setAttribute('hidden', '');
+    document.getElementById('documentPreview').removeAttribute('hidden');
+    document.getElementById('processStart').textContent = 'Detected Information';
+    document.getElementById('CIF').setAttribute('placeholder', '1234-123123-0');
+    document.getElementById('formID').removeAttribute('hidden');
+    document.getElementById('nextAction').setAttribute('placeholder', 'Forward to CID');
   }
 </script>
 <!-- Optional JavaScript -->
@@ -157,7 +275,12 @@
 <script crossorigin="anonymous"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<link crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      rel="stylesheet">
+<script crossorigin="anonymous"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
