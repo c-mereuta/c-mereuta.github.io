@@ -173,6 +173,22 @@
 </div>
 
 
+<div aria-hidden="true" aria-labelledby="validationCheckLabel" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="validationCheck" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="validationCheckLabel">Warning</h5>
+            </div>
+            <div class="modal-body">
+                <p>Please complete all the checks before submitting</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade"
      data-bs-backdrop="static"
@@ -190,7 +206,7 @@
                     </div>
                     <div class="col-sm">
                         <input class="form-control" disabled id="transmitted" type="text"
-                               style="font-size:11px;" value="Compliance Operations CID">
+                               style="font-size:11px;" value="">
                     </div>
                 </div>
                 <div class="row pt-1">
@@ -221,22 +237,6 @@
     </div>
 
     <!-- Modal 2-->
-
-    <div aria-hidden="true" aria-labelledby="validationCheckLabel" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="validationCheck" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="validationCheckLabel">Warning</h5>
-                </div>
-                <div class="modal-body">
-                    <p>Please complete all the checks before submitting</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Understood</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <script>
@@ -273,18 +273,20 @@
 
       function addPages() {
         const filename = fileName();
-        if (filename.includes('Vollmacht')) {
+        if (filename.includes('PoA')) {
           document.getElementById('fileNameModal').textContent = filename + ' - 3 pages';
         } else if (filename.includes('OnlineBanking')) {
           document.getElementById('fileNameModal').textContent = filename + ' - 7 pages';
         } else if (filename.includes('DebitMastercard')) {
           document.getElementById('fileNameModal').textContent = filename + ' - 7 pages';
+        } else if (filename.includes('KuKo')) {
+          document.getElementById('fileNameModal').textContent = filename + ' - 1 page';
         }
       }
 
       function modifyModal(){
         const filename =fileName();
-        if (filename.includes('Vollmacht')) {
+        if (filename.includes('PoA')) {
           document.getElementById('caseTypeModal').textContent = 'A CSDA Client Note has been created';
           document.getElementById('linkModal').setAttribute('href','client_note.png');
         } else if (filename.includes('OnlineBanking')) {
@@ -293,18 +295,30 @@
         } else if (filename.includes('DebitMastercard')) {
           document.getElementById('caseTypeModal').textContent = 'A CoWo 1890 has been created';
           document.getElementById('linkModal').setAttribute('href','https://iops.csintra.net');
+        } else if (filename.includes('KuKo')) {
+          document.getElementById('caseTypeModal').textContent = 'An archive was created in ELAR.';
+          document.getElementById('linkModal').setAttribute('href','https://onejap.csintra.net:31561/elarnet/servlet/elarnet');
         }
       }
 
       function modifyChecks(){
         const filename =fileName();
         checkbox2 = document.getElementById('kyc');
-        if (filename.includes('Vollmacht')) {
+        if (filename.includes('PoA')) {
         } else if (filename.includes('OnlineBanking')) {
           document.getElementById('check2Label').textContent = 'I confirm that customer-relevant data is correct'
         } else if (filename.includes('DebitMastercard')) {
           checkbox2.setAttribute('checked', '')
           document.getElementById('check2').setAttribute('hidden', '')
+        }
+      }
+
+      function modifyTransmitted(){
+        const filename = fileName();
+        if (filename.includes('PoA') || filename.includes('KuKo') || filename.includes('OnlineBanking')) {
+          document.getElementById('transmitted').value = "Compliance Operations CID";
+        } else if (filename.includes('DebitMastercard')) {
+          document.getElementById('transmitted').value = "Operations SVFP31, via CoWo 1890";
         }
       }
 
@@ -314,20 +328,21 @@
       function uploadDocument() {
         const filename = fileName();
         document.getElementById('CIF').value = '1234-123123-0';
-        if (filename.includes('Vollmacht')) {
-          document.getElementById('frame').setAttribute('src', 'Vollmacht.pdf');
+        if (filename.includes('PoA') || filename.includes('KuKo')) {
+          document.getElementById('frame').setAttribute('src', 'CS_PoA_Paolo Bizzozero.pdf');
           document.getElementById('nextAction').value = 'Forward to Client-ID';
           document.getElementById('formNumber').value = 'Power Of Attorney 610203-2.20 ';
         } else if (filename.includes('OnlineBanking')) {
-          document.getElementById('frame').setAttribute('src', 'OnlineBanking.pdf');
+          document.getElementById('frame').setAttribute('src', 'OnlineBanking_Paolo Bizzozero.pdf');
           document.getElementById('nextAction').value = 'Forward to SPS';
           document.getElementById('formNumber').value = 'Online Banking 614698-8.17';
         } else if (filename.includes('DebitMastercard')) {
-          document.getElementById('frame').setAttribute('src', 'DebitMastercard.pdf');
+          document.getElementById('frame').setAttribute('src', 'DebitMastercard_Paolo Bizzozero.pdf');
           document.getElementById('nextAction').value = 'Forward to Cowo 1890';
           document.getElementById('formNumber').value = 'Application for a debit Mastercard 614738-6.20';
         }
         modifyChecks()
+        modifyTransmitted()
         document.getElementById('documentUpload').setAttribute('hidden', '');
         document.getElementById('documentPreview').removeAttribute('hidden');
         document.getElementById('documentData').removeAttribute('hidden');
