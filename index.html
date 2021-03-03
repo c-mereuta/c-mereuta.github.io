@@ -89,9 +89,9 @@
                             </div>
                         </div>
                     </div>
-                    <h5>Checks</h5>
-                    <div class="pt-2 pb-2">
-                        <div class="form-check">
+                    <div id="checkContainer" class="pt-2 pb-2">
+                        <h5>Checks</h5>
+                        <div class="form-check pt-2">
                             <input checked class="form-check-input" id="signatory"
                                    onclick="validation()" type="checkbox"
                                    value="">
@@ -139,7 +139,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-floating pt-2 pb-2">
+                    <div id="annotationsDiv" class="form-floating pt-2 pb-2">
                         <textarea class="form-control" id="annotations"
                                   placeholder="Leave a comment here"
                                   style="height: 100px"></textarea>
@@ -205,14 +205,14 @@
                                style="font-size:11px;" value="">
                     </div>
                 </div>
-                <div class="row pt-1">
+                <div class="row pt-2">
                     <div class="col-sm">
                         <i class="far fa-file-pdf" id="fileIcon"></i>
                         <label for="fileIcon" id="fileNameModal">filename()</label>
                     </div>
                 </div>
-                <hr>
-                <div class="pb-2">
+                <div id="messageModal" class="pb-2">
+                    <hr>
                     <label for="caseLink" id="caseTypeModal">Case has been created</label>
                     <div id="hideModalCaseLink" class="row pt-1" id="caseLink">
                         <div class="col-sm">
@@ -283,38 +283,48 @@
       function modifyModal(){
         const filename =fileName();
         if (filename.includes('PoA')) {
-          document.getElementById('caseTypeModal').textContent = 'A CSDA Client Note has been created';
+          document.getElementById('caseTypeModal').textContent = 'A client note has been created';
           document.getElementById('linkModal').setAttribute('href','client_note.png');
         } else if (filename.includes('OnlineBanking')) {
-          document.getElementById('caseTypeModal').textContent = 'An email has been sent to SPS';
-          document.getElementById('hideModalCaseLink').setAttribute('hidden','');
+          document.getElementById('caseTypeModal').textContent = 'A client note has been created';
+          document.getElementById('linkModal').setAttribute('href','client_note.png');
         } else if (filename.includes('DebitMastercard')) {
-          document.getElementById('caseTypeModal').textContent = 'A CoWo 1890 has been created';
-          document.getElementById('linkModal').setAttribute('href','https://iops.csintra.net');
+          document.getElementById('caseTypeModal').textContent = 'A client note has been created';
+          document.getElementById('linkModal').setAttribute('href','client_note.png');
         } else if (filename.includes('KuKo')) {
-          document.getElementById('caseTypeModal').textContent = 'An archive was created in ELAR.';
-          document.getElementById('linkModal').setAttribute('href','https://onejap.csintra.net:31561/elarnet/servlet/elarnet');
+          document.getElementById('messageModal').setAttribute('hidden','');
         }
       }
 
       function modifyChecks(){
         const filename =fileName();
+        checkbox1 = document.getElementById('signatory');
         checkbox2 = document.getElementById('kyc');
+        checkbox3 = document.getElementById('callbacks');
         if (filename.includes('PoA')) {
         } else if (filename.includes('OnlineBanking')) {
           document.getElementById('check2Label').textContent = 'I confirm that customer-relevant data is correct'
         } else if (filename.includes('DebitMastercard')) {
           checkbox2.setAttribute('checked', '')
           document.getElementById('check2').setAttribute('hidden', '')
+        } else if (filename.includes('KuKo')) {
+          document.getElementById('checkContainer').setAttribute('hidden', '')
+          checkbox1.setAttribute('checked','')
+          checkbox2.setAttribute('checked','')
+          checkbox3.setAttribute('checked','')
         }
       }
 
       function modifyTransmitted(){
         const filename = fileName();
-        if (filename.includes('PoA') || filename.includes('KuKo') || filename.includes('OnlineBanking')) {
+        if (filename.includes('PoA')) {
           document.getElementById('transmitted').value = "Compliance Operations CID";
         } else if (filename.includes('DebitMastercard')) {
           document.getElementById('transmitted').value = "Operations SVFP31, via CoWo 1890";
+        } else if (filename.includes('KuKo')) {
+          document.getElementById('transmitted').value = "ELAR";
+        }else if (filename.includes('OnlineBanking')) {
+          document.getElementById('transmitted').value = "Swiss Post Solutions";
         }
       }
 
@@ -324,7 +334,7 @@
       function uploadDocument() {
         const filename = fileName();
         document.getElementById('CIF').value = '1234-123123-0';
-        if (filename.includes('PoA') || filename.includes('KuKo')) {
+        if (filename.includes('PoA')) {
           document.getElementById('frame').setAttribute('src', 'CS_PoA_Paolo Bizzozero.pdf');
           document.getElementById('nextAction').value = 'Forward to Client-ID';
           document.getElementById('formNumber').value = 'Power Of Attorney 610203-2.20 ';
@@ -336,9 +346,14 @@
           document.getElementById('frame').setAttribute('src', 'DebitMastercard_Paolo Bizzozero.pdf');
           document.getElementById('nextAction').value = 'Forward to Cowo 1890';
           document.getElementById('formNumber').value = 'Application for a debit Mastercard 614738-6.20';
+        } else if (filename.includes('KuKo')) {
+          document.getElementById('frame').setAttribute('src', 'KuKo_Saldierung_Paolo Bizzozero.pdf');
+          document.getElementById('annotationsDiv').setAttribute('hidden', '');
+          document.getElementById('nextAction').value = 'Archive in ELAR';
         }
         modifyChecks()
         modifyTransmitted()
+        validation()
         document.getElementById('documentUpload').setAttribute('hidden', '');
         document.getElementById('documentPreview').removeAttribute('hidden');
         document.getElementById('documentData').removeAttribute('hidden');
